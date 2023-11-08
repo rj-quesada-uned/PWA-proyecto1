@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -40,7 +41,6 @@ namespace WebApplication1.Controllers
             }
         }
 
-
         // GET: Prestamos/Details/5
         public ActionResult Details(int id)
         {
@@ -53,39 +53,67 @@ namespace WebApplication1.Controllers
         // GET: Prestamos/Create
         public ActionResult Create()
         {
+            using (DbModels context = new DbModels())
+            {
+                var colaboradoresActivos = context.Colaboradores
+                    .Where(c => c.Estado == "a")
+                    .Where(c => c.Prestamos.Count(p => p.FechaEntrega == null) <= 4)
+                    .ToList();
+                var HerramientasDisponibles = context.Herramientas.Where(c => c.CantidadDisponible > 0).ToList();
+
+                ViewBag.CedulaColaborador = new SelectList(colaboradoresActivos, "CedulaIdentidad", "CedulaIdentidad");
+                ViewBag.Herramientas = new SelectList(HerramientasDisponibles, "CodigoBarra", "CodigoBarra");
+            }
             return View();
         }
 
         // POST: Prestamos/Create
         [HttpPost]
-        public ActionResult Create(FormCollection collection)
+        public ActionResult Create(Prestamos prestamos)
         {
-            try
+            using (DbModels context = new DbModels())
             {
-                // TODO: Add insert logic here
+                DateTime fechaCompromiso = prestamos.FechaCompromisoDevolucion;
+                DateTime hoy = DateTime.Now;
+                TimeSpan diferencia = fechaCompromiso - hoy;
 
-                return RedirectToAction("Index");
-            }
-            catch
-            {
-                return View();
+                if (diferencia.TotalDays <= 5 & diferencia.TotalDays >= 1)
+                {
+                    var herramienta = context.Herramientas.FirstOrDefault(h => h.CodigoBarra == prestamos.CodigoHerramienta);
+                    herramienta.CantidadDisponible--;
+                    context.Prestamos.Add(prestamos);
+                    prestamos.FechaPrestamo = DateTime.Now;
+                    context.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.Error = "La fecha de compromiso de devolución debe ser dentro de los próximos 5 días.";
+                    return View();
+                }
             }
         }
 
         // GET: Prestamos/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            using (DbModels context = new DbModels())
+            {
+                return View(context.Prestamos.Where(x => x.ID == id).FirstOrDefault());
+            }
         }
 
         // POST: Prestamos/Edit/5
         [HttpPost]
-        public ActionResult Edit(int id, FormCollection collection)
+        public ActionResult Edit(int id, Prestamos prestamos)
         {
             try
             {
-                // TODO: Add update logic here
-
+                using (DbModels context = new DbModels())
+                {
+                    context.Entry(prestamos).State = EntityState.Modified;
+                    context.SaveChanges();
+                }
                 return RedirectToAction("Index");
             }
             catch
@@ -97,7 +125,10 @@ namespace WebApplication1.Controllers
         // GET: Prestamos/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            using (DbModels context = new DbModels())
+            {
+                return View(context.Prestamos.Where(x => x.ID == id).FirstOrDefault());
+            }
         }
 
         // POST: Prestamos/Delete/5
@@ -106,8 +137,14 @@ namespace WebApplication1.Controllers
         {
             try
             {
-                // TODO: Add delete logic here
-
+                using (DbModels context = new DbModels())
+                {
+                    Prestamos prestamos = context.Prestamos.Where(x => x.ID == id).FirstOrDefault();
+                    var herramienta = context.Herramientas.FirstOrDefault(h => h.CodigoBarra == prestamos.CodigoHerramienta);
+                    herramienta.CantidadDisponible++;
+                    prestamos.FechaEntrega = DateTime.Now;
+                    context.SaveChanges();
+                }
                 return RedirectToAction("Index");
             }
             catch
