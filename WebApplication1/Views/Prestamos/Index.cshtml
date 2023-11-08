@@ -6,6 +6,11 @@
 }
 
 <h2>Index</h2>
+<ul class="navbar nav nav-tabs">
+    <li class="active">@Html.ActionLink("Prestamos Activos", "Index", new { })</li>
+    <li>@Html.ActionLink("Prestamos Inactivos", "Inactivos", new { })</li>
+    <li>@Html.ActionLink("Prestamos Atrasados", "Atrasados", new { })</li>
+</ul>
 
 <p>
     @Html.ActionLink("Create New", "Create")

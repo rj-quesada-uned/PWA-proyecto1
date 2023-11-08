@@ -20,10 +20,34 @@ namespace WebApplication1.Controllers
             }
         }
 
+        public ActionResult Inactivos()
+        {
+            using (DbModels context = new DbModels())
+            {
+                var hoy = DateTime.Now;
+                var prestamosInactivos = context.Prestamos.Where(p => p.FechaEntrega != null && p.FechaCompromisoDevolucion < hoy).ToList();
+                return View(prestamosInactivos);
+            }
+        }
+
+        public ActionResult Atrasados()
+        {
+            using (DbModels context = new DbModels())
+            {
+                var hoy = DateTime.Now;
+                var prestamosAtrasados = context.Prestamos.Where(p => p.FechaEntrega == null && p.FechaCompromisoDevolucion < hoy).ToList();
+                return View(prestamosAtrasados);
+            }
+        }
+
+
         // GET: Prestamos/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            using (DbModels context = new DbModels())
+            {
+                return View(context.Prestamos.FirstOrDefault(x => x.ID == id));
+            }
         }
 
         // GET: Prestamos/Create

@@ -22,9 +22,10 @@ namespace WebApplication1.Controllers
         // GET: Herramientas/Details/5
         public ActionResult Details(string id)
         {
+
             using (DbModels context = new DbModels())
             {
-                return View(context.Herramientas.Where(x => x.CodigoBarra == id));
+                return View(context.Herramientas.FirstOrDefault(x => x.CodigoBarra == id));
             }
         }
 

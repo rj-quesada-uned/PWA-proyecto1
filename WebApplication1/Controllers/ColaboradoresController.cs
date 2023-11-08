@@ -24,7 +24,7 @@ namespace WebApplication1.Controllers
         {
             using (DbModels context = new DbModels())
             {
-                return View(context.Colaboradores.Where(x => x.CedulaIdentidad == id));
+                return View(context.Colaboradores.FirstOrDefault(x => x.CedulaIdentidad == id));
             }
         }
 
