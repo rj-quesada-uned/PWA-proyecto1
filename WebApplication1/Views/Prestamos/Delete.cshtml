@@ -1,0 +1,65 @@
+﻿@model WebApplication1.Models.Prestamos
+
+@{
+    ViewBag.Title = "Devolucion";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Devolucion</h2>
+
+<h3>Esta seguro que desea devolver la herramienta?</h3>
+<div>
+    <h4>Prestamos</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CedulaColaborador)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CedulaColaborador)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CodigoHerramienta)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CodigoHerramienta)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaPrestamo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaPrestamo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaCompromisoDevolucion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaCompromisoDevolucion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaEntrega)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaEntrega)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Devolver" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

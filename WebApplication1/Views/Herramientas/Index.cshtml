@@ -1,0 +1,52 @@
+﻿@model IEnumerable<WebApplication1.Models.Herramientas>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Crear nueva herramienta", "Create", "", new { @class="btn btn-success" })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CodigoBarra)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CantidadDisponible)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.CodigoBarra)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Descripcion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CantidadDisponible)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new {id = item.CodigoBarra}, new { @class = "btn btn-warning" }) |
+            @Html.ActionLink("Details", "Details", new { id = item.CodigoBarra }, new { @class = "btn btn-primary" }) |
+            @Html.ActionLink("Delete", "Delete", new { id = item.CodigoBarra }, new { @class = "btn btn-danger" })
+        </td>
+    </tr>
+}
+
+</table>

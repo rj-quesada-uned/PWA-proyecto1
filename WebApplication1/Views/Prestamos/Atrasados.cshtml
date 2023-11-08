@@ -1,0 +1,62 @@
+﻿@model IEnumerable<WebApplication1.Models.Prestamos>
+
+@{
+    ViewBag.Title = "Atrasados";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Atrasados</h2>
+<ul class="navbar nav nav-tabs">
+    <li>@Html.ActionLink("Prestamos Activos", "Index", new { })</li>
+    <li>@Html.ActionLink("Lista de Prestamos", "Inactivos", new { })</li>
+    <li class="active">@Html.ActionLink("Prestamos Atrasados", "Atrasados", new { })</li>
+</ul>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.CedulaColaborador)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CodigoHerramienta)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaPrestamo)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaCompromisoDevolucion)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.FechaEntrega)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.CedulaColaborador)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CodigoHerramienta)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaPrestamo)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaCompromisoDevolucion)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.FechaEntrega)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+            @Html.ActionLink("Devolucion", "Delete", new { id = item.ID })
+        </td>
+    </tr>
+}
+
+</table>
